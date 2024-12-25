@@ -2,13 +2,57 @@
 {
     static void Main(string[] args)
     {
-        var thread1 = new Thread(ProcessoA);
-        var thread2 = new Thread(ProcessoB);
+        //var thread1 = new Thread(ProcessoA);
+        //var thread2 = new Thread(ProcessoB);
 
-        thread1.Start();
-        thread2.Start();
+        //thread1.Start();
+        //thread2.Start();
+
+        Thread t = new Thread(new ThreadStart(MeuMetodo));
+        t.Priority = ThreadPriority.Normal; //Prioridade padrão
+        t.Start();
+        
+        Thread t1 = new Thread(new ThreadStart(MeuMetodo));
+        t1.Priority = ThreadPriority.Lowest; //Prioridade baixa
+        t1.Start();
+
+        Thread t2 = new Thread(new ThreadStart(MeuMetodo1));
+        t2.Priority = ThreadPriority.Highest; //Prioridade alta
+        t2.Start();
+
+        int valor = 3;
+        Thread t3 = new Thread(new ParameterizedThreadStart(MeuMetodoP));
+        t3.IsBackground = true;
+        t3.Start(valor);
 
         Console.ReadLine();
+    }
+
+    public static void MeuMetodo()
+    {
+        for(int i = 0; i <= 20; i++)
+        {
+            Console.WriteLine("ThreadProc {0}", i);
+            Thread.Sleep(1000);
+        }
+    }    
+    
+    public static void MeuMetodo1()
+    {
+        for(int i = 0; i <= 20; i++)
+        {
+            Console.WriteLine("ThreadProc prioridade alta {0}", i);
+            Thread.Sleep(1000);
+        }
+    }
+
+    public static void MeuMetodoP(object a)
+    {
+        for (int i = 0; i <= 20; i++)
+        {
+            Console.WriteLine("valor do parametro a: {0}", a);
+            Thread.Sleep(1000);
+        }
     }
 
     public static void ProcessoA()
